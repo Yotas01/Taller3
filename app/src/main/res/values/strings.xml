@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Taller3</string>
+    <string name="correo">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Iniciar Sesion</string>
+    <string name="signup">Crear cuenta</string>
+    <string name="name">Nombre</string>
+    <string name="last_name">Apellido</string>
+    <string name="id_number">Número de identificación</string>
+    <string name="picture">Foto de perfil</string>
+</resources>
