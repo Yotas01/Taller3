@@ -6,6 +6,8 @@ public class User {
     private String photo;
     private String email;
     private String state;
+    private Long lat;
+    private Long longitude;
 
     public User() {
     }
@@ -49,4 +51,8 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setLongitude(Long longitue){this.longitude = longitue;}
+    public Long getLongitude(){return this.longitude;}
+    public void setLatitude(Long lat){this.lat = lat;}
+    public Long getLatitude(){return this.lat;}
 }
