@@ -8,4 +8,6 @@
     <string name="last_name">Apellido</string>
     <string name="id_number">Número de identificación</string>
     <string name="picture">Foto de perfil</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.taller3;
+package com.taller3.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.taller3.R;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -30,6 +31,9 @@ public class LogInActivity extends AppCompatActivity {
 
         inflate();
 
+        if (mAuth.getCurrentUser() != null)
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
         //"Boton" para crear cuenta
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +45,6 @@ public class LogInActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Autenticar
                 String check = validateAll();
                 if(!check.equals("All Good")) {
                     Toast.makeText(LogInActivity.this,check,Toast.LENGTH_LONG).show();
