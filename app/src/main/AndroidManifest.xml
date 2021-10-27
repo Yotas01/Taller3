@@ -50,6 +50,9 @@
             android:name=".Activities.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".Activities.MapUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.LogInActivity"
             android:exported="true" >
             <intent-filter>
