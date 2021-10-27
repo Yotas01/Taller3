@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -44,6 +46,8 @@ public class UserListActivity extends AppCompatActivity {
     List<Bitmap> rImgs;
     List<String> rName;
     List<String> rIDs;
+    int otherCounter = 0, firstCounter = 0;
+    MyAdapter adapter;
 
 
     @Override
@@ -58,11 +62,24 @@ public class UserListActivity extends AppCompatActivity {
         rImgs = new ArrayList<>();
         rName = new ArrayList<>();
         rIDs = new ArrayList<>();
-        setContentView(R.layout.activity_user_list);
         getUsers();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                openMapForUser(position);
+            }
+        });
+
 
     }
 
+    private void openMapForUser(int position)
+    {
+            Intent i = new Intent(this, MapUsuarioActivity.class);
+            i.putExtra("key",rIDs.get(position));
+            startActivity(i);
+    }
     private void getUsers()
     {
         myRef.addListenerForSingleValueEvent(new ValueEventListener()
@@ -80,7 +97,8 @@ public class UserListActivity extends AppCompatActivity {
 
                     try {
                         downloadFile(singleSnapshot.getKey(), myUser.getPhoto());
-                    } catch (IOException e) {
+                    } catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
 
@@ -88,7 +106,8 @@ public class UserListActivity extends AppCompatActivity {
                     counter++;
 
                 }
-                setAdapters();
+
+                //setAdapters();
             }
             @Override
             public void onCancelled(DatabaseError databaseError)
@@ -100,7 +119,7 @@ public class UserListActivity extends AppCompatActivity {
     }
     private void setAdapters()
     {
-        MyAdapter adapter = new MyAdapter(this, rName, rIDs);
+        adapter = new MyAdapter(this, rName, rIDs, rImgs);
         listView.setAdapter(adapter);
 
     }
@@ -116,6 +135,7 @@ public class UserListActivity extends AppCompatActivity {
         String myPath = imagePath;
         Log.i("TAG",myPath);
         StorageReference imageRef= mStorageRef.child(myPath);
+        firstCounter++;
         imageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -123,6 +143,11 @@ public class UserListActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                 addToBitmapList(myBitmap);
                 Log.i("TAG", "succesfully downloaded");
+                otherCounterAdd();
+                if (firstCounter == otherCounter)
+                {
+                    setAdapters();
+                }
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -132,12 +157,18 @@ public class UserListActivity extends AppCompatActivity {
                     Log.w("TAG", "error in dowload");
                 }
             });
-
     }
     private void addToBitmapList(Bitmap myBitmap)
     {
+        //adapter.setImage(myBitmap);
         rImgs.add(myBitmap);
     }
+    private void otherCounterAdd ()
+    {
+        otherCounter ++;
+    }
+
+
 
 
     class MyAdapter extends ArrayAdapter<String>
@@ -147,11 +178,13 @@ public class UserListActivity extends AppCompatActivity {
         List<String> rIDs;
         List<Bitmap> rImgs;
 
-        MyAdapter (Context c, List<String> title, List<String> id) {
+        MyAdapter (Context c, List<String> title, List<String> id, List<Bitmap> image) {
             super(c, R.layout.row_user_list, R.id.textView1, title);
             this.context = c;
             this.rTitle = title;
             this.rIDs = id;
+            rImgs = image;
+            //rImgs = new ArrayList<>();
 
         }
         @NonNull
@@ -161,7 +194,9 @@ public class UserListActivity extends AppCompatActivity {
             View row = layoutInflater.inflate(R.layout.row_user_list, parent, false);
             ImageView images = row.findViewById(R.id.imageListUsers);
             TextView myTitle = row.findViewById(R.id.textView1);
+
             images.setImageBitmap(rImgs.get(position));
+
             myTitle.setText(rTitle.get(position));
             return row;
 
@@ -169,10 +204,6 @@ public class UserListActivity extends AppCompatActivity {
         public String getID(int position)
         {
             return rIDs.get(position);
-        }
-        public void setImage(Bitmap image)
-        {
-
         }
 
 
