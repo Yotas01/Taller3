@@ -108,15 +108,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         checkGPS();
 
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    User myUser= snapshot.getValue(User.class);
-                    Log.i("TAG", "Encontró usuario: " + myUser.getName());
-                    String name = myUser.getName();
-                    welcome.setText("Hola " + name);
-                }
+                User myUser= dataSnapshot.getValue(User.class);
+                Log.i("TAG", "Encontró usuario: " + myUser.toString());
+                welcome.setText("Hola " + myUser.getName());
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

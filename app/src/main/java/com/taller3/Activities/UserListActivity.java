@@ -94,20 +94,16 @@ public class UserListActivity extends AppCompatActivity {
                     User myUser = singleSnapshot.getValue(User.class);
                     String myName = myUser.getName();
                     Log.w("TAG", "encontro usuario " + myName);
-                    addToLists(myName, singleSnapshot.getKey());
-
+                    if(myUser.getState().equals("available"))
+                        addToLists(myName, singleSnapshot.getKey());
                     try {
                         downloadFile(singleSnapshot.getKey(), myUser.getPhoto());
                     } catch (IOException e)
                     {
                         e.printStackTrace();
                     }
-
-
                     counter++;
-
                 }
-
                 //setAdapters();
             }
             @Override

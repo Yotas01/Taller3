@@ -105,7 +105,9 @@ public class MapUsuarioActivity extends AppCompatActivity implements OnMapReadyC
                 if(position != null) {
                     position.remove();
                 }
-                position = mMap.addMarker(new MarkerOptions().position(location).title("Estas aqui"));
+                position = mMap.addMarker(new MarkerOptions().position(location).title("Tu amigo está aqui"));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(13));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
             }
         };
     }

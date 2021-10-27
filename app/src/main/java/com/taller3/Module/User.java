@@ -55,4 +55,17 @@ public class User {
     public Long getLongitude(){return this.longitude;}
     public void setLatitude(Long lat){this.lat = lat;}
     public Long getLatitude(){return this.lat;}
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", photo='" + photo + '\'' +
+                ", email='" + email + '\'' +
+                ", state='" + state + '\'' +
+                ", lat=" + lat +
+                ", longitude=" + longitude +
+                '}';
+    }
 }
