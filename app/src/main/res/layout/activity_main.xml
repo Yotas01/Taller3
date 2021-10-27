@@ -25,4 +25,10 @@
         android:layout_weight="9"
         tools:context=".Activities.MainActivity" />
 
+    <Button
+        android:id="@+id/buttonToList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to List of Users" />
+
 </LinearLayout>
