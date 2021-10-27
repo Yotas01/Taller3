@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     position.remove();
                 }
                 position = mMap.addMarker(new MarkerOptions().position(location).title("Estas aqui"));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(13));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
             }
         };
     }
@@ -286,6 +289,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         else if (itemClicked == R.id.menuState){
             ref.child(user.getUid()).child("state").setValue("available");
+        }
+        else if(itemClicked == R.id.menuStateAway){
+            ref.child(user.getUid()).child("state").setValue("away");
         }
         return super.onOptionsItemSelected(item);
     }
