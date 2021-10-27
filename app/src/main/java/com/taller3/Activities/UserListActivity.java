@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -61,10 +63,24 @@ public class UserListActivity extends AppCompatActivity {
         rName = new ArrayList<>();
         rIDs = new ArrayList<>();
         getUsers();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                openMapForUser(position);
+            }
+        });
+
 
 
     }
 
+    private void openMapForUser(int position)
+    {
+            Intent i = new Intent(this, MapUsuarioActivity.class);
+            i.putExtra("key",rIDs.get(position));
+            startActivity(i);
+    }
     private void getUsers()
     {
         myRef.addListenerForSingleValueEvent(new ValueEventListener()
