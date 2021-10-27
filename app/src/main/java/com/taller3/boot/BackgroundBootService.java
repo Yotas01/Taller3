@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -20,10 +21,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.taller3.LogInActivity;
+import com.taller3.Activities.LogInActivity;
 import com.taller3.Module.User;
 import com.taller3.R;
-import com.taller3.UserListActivity;
+import com.taller3.Activities.UserListActivity;
 
 public class BackgroundBootService extends Service
 {
@@ -78,7 +79,7 @@ public class BackgroundBootService extends Service
         myRef.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren())
                 {
@@ -113,7 +114,7 @@ public class BackgroundBootService extends Service
         myListener = myRef.addValueEventListener( new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
                 int availableUsersCurr = 0;
 
