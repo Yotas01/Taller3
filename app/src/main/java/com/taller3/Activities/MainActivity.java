@@ -2,6 +2,7 @@ package com.taller3.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -41,10 +43,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.taller3.Module.DTOJson;
+import com.taller3.Module.User;
 import com.taller3.R;
 import com.taller3.databinding.ActivityMainBinding;
 
@@ -67,7 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMainBinding binding;
@@ -83,6 +88,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     FirebaseUser user;
     FirebaseDatabase database;
     DatabaseReference ref;
+    TextView welcome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +96,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         requestPermission(this,permLocation,"We need location",LOCATION_REQUEST);
         inflate();
         checkGPS();
+
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User myUser= snapshot.getValue(User.class);
+                    Log.i("TAG", "Encontró usuario: " + myUser.getName());
+                    String name = myUser.getName();
+                    welcome.setText("Hola " + name);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("DB","Error de consulta");
+            }
+        });
 
         task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
             @Override
@@ -219,6 +242,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         user = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         ref = database.getReference().child("Users");
+        welcome = findViewById(R.id.welcome);
     }
     private LocationRequest createLocationRequest(){
         LocationRequest locationRequest = LocationRequest.create()
