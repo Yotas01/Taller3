@@ -71,6 +71,7 @@ public class MapUsuarioActivity extends AppCompatActivity implements OnMapReadyC
         //setContentView(R.layout.activity_map_usuario);
         requestPermission(this,permLocation,"We need location",LOCATION_REQUEST);
         inflate();
+        encontrarUsuario();
         checkGPS();
 
 
@@ -119,6 +120,37 @@ public class MapUsuarioActivity extends AppCompatActivity implements OnMapReadyC
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
+    }
+    private void encontrarUsuario()
+    {
+        String idSent;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            idSent = extras.getString("key");
+            //The key argument here must match that used in the other activity
+        }
+        else
+        {
+            idSent = "";
+        }
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User myUser2= snapshot.getValue(User.class);
+                    if (dataSnapshot.getKey() == idSent)
+                    {
+                        Log.i("TAG", "Encontró usuario: " + myUser2.getName());
+                        myUser = myUser2;
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("DB","Error de consulta");
+            }
+        });
     }
 
     @Override
